@@ -20,6 +20,8 @@ class Problem(models.Model):
     problem_statement = models.TextField()
     constraints = models.TextField()
     code_template = models.TextField(blank=True, null=True)
+    input_format = models.TextField(blank=True, null=True)
+    output_format = models.TextField(blank=True, null=True)
     difficulty = models.CharField(max_length=6, choices=DIFFICULTY_CHOICES)
     tags = models.ManyToManyField(Tag)
 
@@ -28,7 +30,7 @@ class Problem(models.Model):
     
 
 class TestExample(models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='test_examples')
     input_data = models.TextField()
     output_data = models.TextField()
 
