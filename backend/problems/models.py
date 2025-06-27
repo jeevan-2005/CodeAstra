@@ -36,3 +36,11 @@ class TestExample(models.Model):
 
     def __str__(self):
         return f"Example {self.id} for {self.problem.problem_name}"
+
+class TestCase(models.Model):
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name='test_cases_files')
+    input_data_file = models.CharField(max_length=255)
+    output_data_file = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Test case files for {self.problem.problem_name}"

@@ -12,6 +12,11 @@ class TestExampleSerializer(serializers.ModelSerializer):
         model = TestExample
         fields = '__all__'
 
+class TestCaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestCase
+        fields = '__all__'
+
 class ProblemDetialSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     test_examples = TestExampleSerializer(many=True, read_only=True)
