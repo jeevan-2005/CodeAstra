@@ -1,7 +1,6 @@
 "use client";
 
 import { useGetUserQuery } from "@/redux/auth/authApi";
-import { Skeleton } from "./ui/skeleton";
 import Navbar from "./Navbar";
 import { setUser } from "@/redux/auth/authSlice";
 import { useEffect, useState } from "react";
@@ -11,15 +10,15 @@ import LoadingSpinner from "./LoadingSpinner";
 const LayoutWithUser = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
   const [access, setAccess] = useState<string | null>(null);
-  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
+      console.log("access", localStorage.getItem("access"));
       setAccess(localStorage.getItem("access"));
     }
   }, []);
 
-  const { data: user } = useGetUserQuery(undefined, {
+  const { data: user, isLoading } = useGetUserQuery(undefined, {
     skip: !access,
   });
 
@@ -27,7 +26,6 @@ const LayoutWithUser = ({ children }: { children: React.ReactNode }) => {
     // Save user to slice if fetched
     if (user) {
       dispatch(setUser(user));
-      setLoading(false);
     }
   }, [user, dispatch]);
 
