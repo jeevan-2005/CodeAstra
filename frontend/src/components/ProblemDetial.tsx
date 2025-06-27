@@ -9,6 +9,8 @@ import LoadingSpinner from "./LoadingSpinner";
 import ProblemStatement from "./ProblemStatement";
 import CodeEditer from "./CodeEditer";
 import CustomTestAndSubmission from "./CustomTestAndSubmission";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export interface ProblemFetchError {
   status: number;
@@ -19,8 +21,15 @@ export interface ProblemFetchError {
 
 const ProblemDetial = ({ id }: { id: number }) => {
   const { data, isLoading, isError, error } = useGetProblemDetailQuery({ id });
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const problemData = data as SingleProblemDetial;
+
+  const [code, setCode] = React.useState<string>(
+    "// Select a language above and start typing!"
+  );
+
+  const [language, setLanguage] = React.useState<string>("cpp");
 
   if (isLoading) {
     return (
@@ -53,8 +62,15 @@ const ProblemDetial = ({ id }: { id: number }) => {
         />
       </div>
       <div className="w-[50%] h-full overflow-auto border p-4 flex flex-col gap-4">
-        <CodeEditer />
-        <CustomTestAndSubmission />
+        <CodeEditer
+          problem_id={id}
+          code={code}
+          setCode={setCode}
+          language={language}
+          setLanguage={setLanguage}
+          user_id={user?.id}
+        />
+        <CustomTestAndSubmission problem_id={id} code={code} language={language} user_id={user?.id} />
       </div>
     </div>
   );
