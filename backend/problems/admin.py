@@ -4,3 +4,4 @@ from .models import *
 admin.site.register(Problem)
 admin.site.register(TestExample)
 admin.site.register(Tag)
+admin.site.register(TestCase)
