@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'accounts',
     'problems',
     'django_filters',
+    'submission',
 ]
 
 MIDDLEWARE = [
