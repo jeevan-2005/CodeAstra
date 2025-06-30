@@ -24,15 +24,15 @@ const LayoutWithUser = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Save user to slice if fetched
-    if (user) {
+    if (user && !isLoading) {
       dispatch(setUser(user));
     }
-  }, [user, dispatch]);
+  }, [user, dispatch, isLoading]);
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen w-screen">
-        <LoadingSpinner size={55} />
+      <div className="flex items-center justify-center h-screen w-screen bg-slate-950 ">
+        <LoadingSpinner size={55} className="text-white" />
       </div>
     );
   }
