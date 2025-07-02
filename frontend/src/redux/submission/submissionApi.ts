@@ -40,6 +40,32 @@ export interface SubmitCodeResponse {
   details: string;
 }
 
+export interface getAIReviewRequest {
+  code: string;
+  reviewType: string;
+  problem_name: string;
+  problem_statement: string;
+  problem_constraints: string;
+}
+
+export interface getAiReviewResponse {
+  review: string;
+}
+
+export interface Submission {
+  id: number;
+  problem_name: string;
+  code: string;
+  language: string;
+  verdict: string;
+  problem_id: number;
+  timestamp: string;
+}
+
+export interface UserSubmissionsResponse {
+  submissions: Submission[];
+}
+
 const submissionApi = createApi({
   reducerPath: "submissionApi",
   baseQuery: customBaseQuery,
@@ -72,7 +98,10 @@ const submissionApi = createApi({
         return url;
       },
     }),
-    runCustomTestCase: builder.mutation<RunCustomTestCaseResponse, RunCustomTestCaseRequest>({
+    runCustomTestCase: builder.mutation<
+      RunCustomTestCaseResponse,
+      RunCustomTestCaseRequest
+    >({
       query: (body) => ({
         url: "execute/run/",
         method: "POST",
@@ -85,9 +114,40 @@ const submissionApi = createApi({
         method: "POST",
         body,
       }),
-    })
+    }),
+    getAiReview: builder.mutation<getAiReviewResponse, getAIReviewRequest>({
+      query: (body) => ({
+        url: "ai-review/",
+        method: "POST",
+        body,
+      }),
+    }),
+    getUserSubmissions: builder.query<UserSubmissionsResponse, number | undefined>({
+      query: (user_id: number) => ({
+        url: `/submissions/${user_id}`,
+        method: "GET",
+      }),
+    }),
+    getUserSubmissionByProblemId: builder.query<
+      UserSubmissionsResponse,
+      { user_id: number | undefined; problem_slug: string }
+    >({
+      query: ({ user_id, problem_slug }) => ({
+        url: `/submissions/${user_id}/${problem_slug}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useSaveCodeMutation, useGetSavedCodeQuery, useRunCustomTestCaseMutation, useSubmitCodeMutation } = submissionApi;
+export const {
+  useSaveCodeMutation,
+  useGetSavedCodeQuery,
+  useRunCustomTestCaseMutation,
+  useSubmitCodeMutation,
+  useGetAiReviewMutation,
+  useGetUserSubmissionsQuery,
+  useGetUserSubmissionByProblemIdQuery,
+} = submissionApi;
+
 export default submissionApi;
