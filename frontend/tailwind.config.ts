@@ -1,26 +1,22 @@
-import type { Config } from "tailwindcss"
-import tailwindcssAnimate from "tailwindcss-animate";
+// tailwind.config.ts
+import type { Config } from 'tailwindcss';
+import tailwindcssAnimate from 'tailwindcss-animate';
 
 const config = {
-  darkMode: "class",
+  // This is the crucial part in v4:
+  // The 'content' array tells Tailwind which files to scan for class names.
+  // Without this, no CSS will be generated.
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-    "*.{js,ts,jsx,tsx,mdx}",
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    // Add other paths if needed
   ],
-  prefix: "",
+  // ... other theme customizations
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
-      colors: {
+       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -54,9 +50,8 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom dark theme colors
-        slate: {
-          950: "#0f172a",
+         slate: {
+           950: "#0f172a",
         },
       },
       borderRadius: {
@@ -80,7 +75,15 @@ const config = {
       },
     },
   },
-  plugins: [tailwindcssAnimate],
-} satisfies Config
+  // Plugins array is still used in v4 config
+  plugins: [
+      tailwindcssAnimate,
+      typography, // Add the typography plugin here
+      // ... other plugins
+  ],
+  // v4 might have a slightly different top-level structure or additional options
+  // Refer to the official v4 docs for Next.js for the definitive structure.
 
-export default config
+} satisfies Config; // Using satisfies for type checking
+
+export default config;
