@@ -8,18 +8,15 @@ import {
   LogOut,
   Trophy,
   FileText,
-  Users,
   Target,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import {
   DropdownMenu,
@@ -65,8 +62,7 @@ const Navbar = () => {
   const navigationItems = [
     { name: "Problems", href: "/problems", icon: Target },
     { name: "Contests", href: "/contests", icon: Trophy },
-    { name: "Code Review", href: "/code-review", icon: FileText },
-    { name: "Leaderboard", href: "/leaderboard", icon: Users },
+    { name: "My Submissions", href: "/submissions", icon: FileText },
   ];
 
   return (
@@ -184,64 +180,16 @@ const Navbar = () => {
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger data-slot="navigation-menu-trigger"  className="bg-slate-950 text-slate-300 V hover:bg-slate-800/50 hover:text-white focus:bg-slate-800/50 focus:text-white transition-all duration-200 cursor-pointer text-[16px]">
-                  Practice
-                </NavigationMenuTrigger>
-                <NavigationMenuContent className="p-0 bg-slate-950">
-                  <div className="grid w-[400px] p-1 bg-slate-950 border border-slate-800">
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href="/code-review"
-                        className="group grid h-auto w-full items-center justify-start gap-1 rounded-lg p-4 text-sm font-medium transition-all duration-200 hover:bg-slate-800/50 focus:bg-slate-800/50 focus:outline-none"
-                      >
-                        <div className="text-sm font-medium leading-none text-white group-hover:text-blue-400 transition-colors">
-                          Code Review
-                        </div>
-                        <div className="line-clamp-2 text-sm leading-snug text-slate-400">
-                          Get your code reviewed by peers and experts
-                        </div>
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href="/practice"
-                        className="group grid h-auto w-full items-center justify-start gap-1 rounded-lg p-4 text-sm font-medium transition-all duration-200 hover:bg-slate-800/50 focus:bg-slate-800/50 focus:outline-none"
-                      >
-                        <div className="text-sm font-medium leading-none text-white group-hover:text-blue-400 transition-colors">
-                          Practice Arena
-                        </div>
-                        <div className="line-clamp-2 text-sm leading-snug text-slate-400">
-                          Solve problems at your own pace
-                        </div>
-                      </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href="/submissions"
-                        className="group grid h-auto w-full items-center justify-start gap-1 rounded-lg p-4 text-sm font-medium transition-all duration-200 hover:bg-slate-800/50 focus:bg-slate-800/50 focus:outline-none"
-                      >
-                        <div className="text-sm font-medium leading-none text-white group-hover:text-blue-400 transition-colors">
-                          My Submissions
-                        </div>
-                        <div className="line-clamp-2 text-sm leading-snug text-slate-400">
-                          Track your submission history and progress
-                        </div>
-                      </Link>
-                    </NavigationMenuLink>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
                 <NavigationMenuLink asChild>
                   <Link
-                    href="/leaderboard"
+                    href="/submissions"
                     className="group inline-flex h-9 w-max items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-all duration-200 hover:bg-slate-800/50 hover:text-white focus:bg-slate-800/50 focus:text-white focus:outline-none text-[16px]"
                   >
-                    Leaderboard
+                    My Submissions
                   </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
-            </NavigationMenuList>
+              </NavigationMenuList>
           </NavigationMenu>
 
           {/* Right side - Authentication */}
