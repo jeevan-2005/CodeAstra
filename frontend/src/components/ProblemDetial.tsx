@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Card, CardContent } from "./ui/card";
 import { AlertTriangle } from "lucide-react";
+import AiCodeReview from "./AiCodeReview";
 
 export interface ProblemFetchError {
   status: number;
@@ -105,6 +106,12 @@ const ProblemDetial = ({ id }: { id: number }) => {
               code={code}
               language={language}
               user_id={user?.id}
+            />
+            <AiCodeReview
+              code={code}
+              problem_name={problemData.problem_name}
+              problem_statement={problemData.problem_statement}
+              problem_constraints={problemData.constraints}
             />
           </div>
         </div>
