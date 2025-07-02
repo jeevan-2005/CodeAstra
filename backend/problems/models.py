@@ -16,7 +16,7 @@ class Problem(models.Model):
         ('Hard', 'Hard'),
     ]
 
-    problem_name = models.CharField(max_length=100)
+    problem_name = models.CharField(max_length=100, unique=True)
     problem_statement = models.TextField()
     constraints = models.TextField()
     code_template = models.TextField(blank=True, null=True)
