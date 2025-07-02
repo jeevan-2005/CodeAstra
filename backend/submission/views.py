@@ -6,9 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from .models import *
 from problems.models import *
 from accounts.models import *
-import os
-import uuid
-import subprocess
+from .utils import execute_code, aiCodeReview
+from .serializers import SubmissionSerializer
 
 
 class SaveCodeView(APIView):
@@ -192,175 +191,64 @@ class SubmitCodeView(APIView):
                 "details": str(e)
             },status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-def execute_code(code, language, user_input , input_type, timeout_seconds):
 
-    folder_name = "InputCodes"
-    curr_dir = os.getcwd()
-    folder_path = os.path.join(curr_dir, folder_name)
+class AiCodeReview(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    os.makedirs(folder_path, exist_ok=True)
+    def post(self, request):
+        code = request.data.get("code")
+        problem_statement = request.data.get("problem_statement")
+        problem_name = request.data.get("problem_name")
+        problem_constraints = request.data.get("problem_constraints")
+        reviewType = request.data.get("reviewType")
 
-    unique_name = uuid.uuid4().hex
-    code_file_name = f"{unique_name}.{language}"
-    code_file_path = os.path.join(folder_path, code_file_name)
-    executable_file_path = None 
-    
-    result = {
-        "status": "internal_error",
-        "details": "An unexpected server error occurred."
-    }
-
-    try:
-        with open(code_file_path, "w", encoding="utf-8") as f:
-            f.write(code)
-
-        if language == "c":
-            result = cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, timeout_seconds, "gcc", input_type)
-
-        elif language == "cpp":
-            result = cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, timeout_seconds, "g++", input_type)
-
-        elif language == "py":
-            try:
-                if (input_type == "bytes"):
-                    execution_result = subprocess.run(
-                        ["python", code_file_path],
-                        input=user_input,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                        timeout=timeout_seconds
-                    )
-                else:
-                    with open(f"{user_input}", "r") as input_file:
-                        execution_result = subprocess.run(
-                            ["python", code_file_path],
-                            stdin=input_file,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            timeout=timeout_seconds
-                        )
-                        
-                execution_stdout = execution_result.stdout.decode("utf-8", errors='ignore')
-                execution_stderr = execution_result.stderr.decode("utf-8", errors='ignore')
-                
-                if execution_stderr:
-                    result = {
-                        "status": "runtime_error",
-                        "details": execution_stderr
-                    }
-                else:
-                    result = {
-                    "status": "success",
-                    "output": execution_stdout
-                    }
-            except FileNotFoundError:
-                result = {
-                "status": "internal_error",
-                "details": "Python interpreter not found. Is it installed and in PATH?"
-                }
-            except subprocess.TimeoutExpired:
-                result = {
-                "status": "timeout_error",
-                "details": f"Execution timed out after {timeout_seconds} seconds."
-                }
-
-
-        else:
-            result = {
-                "status": "invalid_language",
-                "details": f"Language '{language}' is not supported."
-            }
-
-    except Exception as e:
-        result = {
-            "status": "internal_error",
-            "details": f"An unexpected error occurred during processing: {e}"
-        }
-    finally:
-        if os.path.exists(code_file_path):
-            try:
-                os.remove(code_file_path)
-            except OSError as e:
-                print(f"Warning: Could not remove source file {code_file_path}: {e}")
-
-        if executable_file_path and os.path.exists(executable_file_path):
-            try:
-                os.remove(executable_file_path)
-            except OSError as e:
-                print(f"Warning: Could not remove executable file {executable_file_path}: {e}")
-
-    return result
-
-def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, timeout_seconds, compiler, input_type):
-    executable_file_path = os.path.join(folder_path, unique_name)
-    try:
-        compilation_res = subprocess.run(
-            [compiler, code_file_path, "-o", executable_file_path],
-            capture_output=True,
-            text=True,
-            timeout=timeout_seconds
-        )
-    except FileNotFoundError:
-        result = {
-            "status": "internal_error",
-            "details": f"{compiler} compiler not found. Is it installed and in PATH?"
-        }
-        return result
-    except subprocess.TimeoutExpired:
-        result = {
-            "status": "compilation_error",
-            "details": f"Compilation timed out after {timeout_seconds} seconds."
-        }
-        return result
-
-
-    if compilation_res.returncode != 0:
-            result = {
-                "status": "compilation_error",
-                "details": compilation_res.stderr
-            }
-    else:
         try:
-            if (input_type == "bytes"):
-                    execution_result = subprocess.run(
-                        ["python", code_file_path],
-                        input=user_input,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                        timeout=timeout_seconds
-                    )
-            else:
-                with open(f"{user_input}", "r") as input_file:
-                    execution_result = subprocess.run(
-                        ["python", code_file_path],
-                        stdin=input_file,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                        timeout=timeout_seconds
-                    )
+            result = aiCodeReview(code, reviewType, problem_statement, problem_name, problem_constraints)
+            return Response({
+                "review": result
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            execution_stdout = execution_result.stdout.decode("utf-8", errors='ignore')
-            execution_stderr = execution_result.stderr.decode("utf-8", errors='ignore')
+class getUserSubmissions(APIView):
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
-            if execution_stderr:
-                result = {
-                    "status": "runtime_error",
-                    "details": execution_stderr
-                }
-            else:
-                result = {
-                "status": "success",
-                "output": execution_stdout
-                }
-        except FileNotFoundError:
-            result = {
-                "status": "internal_error",
-                "details": f"Executable not found after compilation: {executable_file_path}"
-            }
-        except subprocess.TimeoutExpired:
-            result = {
-                "status": "timeout_error",
-                "details": f"Execution timed out after {timeout_seconds} seconds."
-            }
+    def get(self, request, user_id:int):
+
+        try:
+            user = CustomUser.objects.filter(id=user_id).first()
+            if not user:
+                return Response({
+                    "error": "User not found"
+                }, status=status.HTTP_404_NOT_FOUND)
+            submissions = SubmissionModel.objects.filter(user_id=user.id).order_by('-timestamp')
+            serializer = SubmissionSerializer(submissions, many=True)
+            return Response({"submissions": serializer.data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class getUserSubmissionByProblemId(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     
-    return result
+    def get(self, request, user_id:int, problem_name:str):
+        try:
+            user = CustomUser.objects.filter(id=user_id).first()
+            if not user:
+                return Response({
+                    "error": "User not found"
+                }, status=status.HTTP_404_NOT_FOUND)
+            
+            problem = Problem.objects.filter(problem_name=problem_name).first()
+            if not problem:
+                return Response({
+                    "error": "Problem not found"
+                }, status=status.HTTP_404_NOT_FOUND)
+
+            problemSubmission = SubmissionModel.objects.filter(user_id=user.id, problem_id=problem.id).order_by('-timestamp')
+            serializer = SubmissionSerializer(problemSubmission, many=True)
+            return Response({"submissions": serializer.data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
