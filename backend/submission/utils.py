@@ -11,7 +11,7 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-def execute_code(code, language, user_input , input_type, timeout_seconds):
+def execute_code(code, language, user_input , input_type):
 
     folder_name = "InputCodes"
     curr_dir = os.getcwd()
@@ -34,10 +34,14 @@ def execute_code(code, language, user_input , input_type, timeout_seconds):
             f.write(code)
 
         if language == "c":
-            result = cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, timeout_seconds, "gcc", input_type)
+            result = cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, 2, "gcc", input_type)
+            executable_file_name = f"{unique_name}.exe"
+            executable_file_path = os.path.join(folder_path, executable_file_name)
 
         elif language == "cpp":
-            result = cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, timeout_seconds, "g++", input_type)
+            result = cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, 2, "g++", input_type)
+            executable_file_name = f"{unique_name}.exe"
+            executable_file_path = os.path.join(folder_path, executable_file_name)
 
         elif language == "py":
             try:
@@ -47,7 +51,7 @@ def execute_code(code, language, user_input , input_type, timeout_seconds):
                         input=user_input,
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
-                        timeout=timeout_seconds
+                        timeout=7
                     )
                 else:
                     with open(f"{user_input}", "r") as input_file:
@@ -56,7 +60,7 @@ def execute_code(code, language, user_input , input_type, timeout_seconds):
                             stdin=input_file,
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
-                            timeout=timeout_seconds
+                            timeout=7
                         )
                         
                 execution_stdout = execution_result.stdout.decode("utf-8", errors='ignore')
@@ -80,7 +84,7 @@ def execute_code(code, language, user_input , input_type, timeout_seconds):
             except subprocess.TimeoutExpired:
                 result = {
                 "status": "timeout_error",
-                "details": f"Execution timed out after {timeout_seconds} seconds."
+                "details": f"Execution timed out after {1 if language in ['c', 'cpp'] else 7} seconds."
                 }
 
 
@@ -133,7 +137,9 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
         }
         return result
 
-
+    Basedir = os.getcwd()
+    os.chdir(os.path.join(Basedir, "InputCodes"))
+    
     if compilation_res.returncode != 0:
             result = {
                 "status": "compilation_error",
@@ -142,26 +148,26 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
     else:
         try:
             if (input_type == "bytes"):
-                    execution_result = subprocess.run(
-                        ["python", code_file_path],
-                        input=user_input,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                        timeout=timeout_seconds
-                    )
+                execution_result = subprocess.run(
+                    [f"./{unique_name}.exe"],
+                    input=user_input,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    timeout=timeout_seconds
+                )
             else:
                 with open(f"{user_input}", "r") as input_file:
                     execution_result = subprocess.run(
-                        ["python", code_file_path],
+                        [f"./{unique_name}.exe"],
                         stdin=input_file,
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         timeout=timeout_seconds
                     )
-
+                    
             execution_stdout = execution_result.stdout.decode("utf-8", errors='ignore')
             execution_stderr = execution_result.stderr.decode("utf-8", errors='ignore')
-
+            
             if execution_stderr:
                 result = {
                     "status": "runtime_error",
@@ -182,6 +188,7 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
                 "status": "timeout_error",
                 "details": f"Execution timed out after {timeout_seconds} seconds."
             }
+    os.chdir(Basedir)
     
     return result
 

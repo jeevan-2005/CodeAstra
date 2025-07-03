@@ -74,7 +74,7 @@ class RunCustomTestCaseView(APIView):
         
         user_input = user_input.encode("utf-8")
 
-        result = execute_code(code, language, user_input, "bytes", 10)
+        result = execute_code(code, language, user_input, "bytes")
 
         if (result["status"] in ["compilation_error", "runtime_error", "invalid_language"]):
             return Response(result, status=status.HTTP_400_BAD_REQUEST)
@@ -114,19 +114,24 @@ class SubmitCodeView(APIView):
             input_file_path = test_cases_files.input_data_file
             output_file_path = test_cases_files.output_data_file
              
-            result = execute_code(code, language, input_file_path, "file", 10)
-
+            result = execute_code(code, language, input_file_path, "file")
+            
             if result["status"] == "success":
                 output = (result["output"])
 
                 with open(output_file_path, "r") as f:
                     expected_output = f.read()
 
+                # normalized_output = output.replace(' \r\n', '\n')
                 normalized_output = output.replace('\r\n', '\n')
                 normalized_expected_output = expected_output.replace('\r\n', '\n')
 
-                clean_output = normalized_output.strip()
-                clean_expected_output = normalized_expected_output.strip()
+                def strip_trailing(ws_text: str) -> str:
+                    lines = ws_text.split('\n')
+                    return "\n".join(line.rstrip() for line in lines)
+
+                clean_output   = strip_trailing(normalized_output).strip()
+                clean_expected_output = strip_trailing(normalized_expected_output).strip()
 
                 if clean_output == clean_expected_output:
                     result["verdict"] = "Accepted"
