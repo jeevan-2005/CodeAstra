@@ -1,8 +1,13 @@
 // src/redux/auth/customBaseQuery.ts
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+interface RefreshResult {
+  access: string;
+  refresh: string;
+}
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://127.0.0.1:8000/api/v1/",
+  baseUrl: process.env.NEXT_PUBLIC_API_URL,
   prepareHeaders: (headers) => {
     if (typeof window !== "undefined") {
       const access = localStorage.getItem("access");
@@ -35,10 +40,10 @@ export const customBaseQuery = async (
         api,
         extraOptions
       );
-      if (refreshResult.data && (refreshResult.data as any).access) {
-        localStorage.setItem("access", (refreshResult.data as any).access);
-        if ((refreshResult.data as any).refresh) {
-          localStorage.setItem("refresh", (refreshResult.data as any).refresh);
+      if (refreshResult.data && (refreshResult.data as RefreshResult).access) {
+        localStorage.setItem("access", (refreshResult.data as RefreshResult).access);
+        if ((refreshResult.data as RefreshResult).refresh) {
+          localStorage.setItem("refresh", (refreshResult.data as RefreshResult).refresh);
         }
         
         result = await baseQuery(args, api, extraOptions);

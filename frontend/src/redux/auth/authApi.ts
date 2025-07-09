@@ -60,7 +60,7 @@ export const authApi = createApi({
             );
           }
         } catch (error) {
-          console.error("Registration failed: ", error);
+          console.log("Registration failed: ", error);
         }
       },
     }),
@@ -88,7 +88,7 @@ export const authApi = createApi({
             );
           }
         } catch (error) {
-          console.error("Login failed: ", error);
+          console.log("Login failed: ", error);
         }
       },
     }),
@@ -106,7 +106,7 @@ export const authApi = createApi({
           localStorage.removeItem("refresh");
           dispatch(logout());
         } catch (error) {
-          console.error("Logout failed: ", error);
+          console.log("Logout failed: ", error);
         }
       },
     }),
@@ -126,7 +126,7 @@ export const authApi = createApi({
             );
           }
         } catch (error) {
-          console.error("Get user failed: ", error);
+          console.log("Get user failed: ", error);
         }
       },
     }),
