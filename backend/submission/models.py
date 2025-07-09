@@ -25,6 +25,8 @@ class SubmissionModel(models.Model):
     problem_id = models.ForeignKey('problems.Problem', on_delete=models.CASCADE, related_name='problem_submissions')
     timestamp = models.DateTimeField(auto_now_add=True)
     verdict = models.CharField(max_length=100, blank=True, null=True, choices=VERDICT_CHOICES)
+    time_taken = models.IntegerField(blank=True, null=True)
+    memory_taken = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return f"Submission made by {self.user_id.username} for the problem - {self.problem_id.problem_name}"

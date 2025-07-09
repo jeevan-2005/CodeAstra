@@ -8,7 +8,7 @@ from problems.models import *
 from accounts.models import *
 from .utils import execute_code, aiCodeReview
 from .serializers import SubmissionSerializer
-
+import os
 
 class SaveCodeView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -113,7 +113,7 @@ class SubmitCodeView(APIView):
             test_cases_files = TestCase.objects.filter(problem=problem_instance).first()
             input_file_path = test_cases_files.input_data_file
             output_file_path = test_cases_files.output_data_file
-             
+            
             result = execute_code(code, language, input_file_path, "file")
             
             if result["status"] == "success":
@@ -122,7 +122,6 @@ class SubmitCodeView(APIView):
                 with open(output_file_path, "r") as f:
                     expected_output = f.read()
 
-                # normalized_output = output.replace(' \r\n', '\n')
                 normalized_output = output.replace('\r\n', '\n')
                 normalized_expected_output = expected_output.replace('\r\n', '\n')
 
@@ -143,7 +142,8 @@ class SubmitCodeView(APIView):
                     code=code,
                     user_id=user_instance,
                     problem_id=problem_instance,
-                    verdict=result["verdict"]
+                    verdict=result["verdict"],
+                    time_taken=result["execution_time"],
                 )
 
                 return Response({
@@ -164,7 +164,8 @@ class SubmitCodeView(APIView):
                         code=code,
                         user_id=user_instance,
                         problem_id=problem_instance,
-                        verdict=result["verdict"]
+                        verdict=result["verdict"],
+                        time_taken=0,
                     )
 
                 return Response({
@@ -178,7 +179,8 @@ class SubmitCodeView(APIView):
                     code=code,
                     user_id=user_instance,
                     problem_id=problem_instance,
-                    verdict="Time Limit Exceeded"
+                    verdict="Time Limit Exceeded",
+                    time_taken=7000 if language == "py" else 2000,
                 )
                 return Response({
                     "verdict": "Time Limit Exceeded",
@@ -202,14 +204,15 @@ class AiCodeReview(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        code = request.data.get("code")
+        code = request.data.get("code") or ""
         problem_statement = request.data.get("problem_statement")
         problem_name = request.data.get("problem_name")
         problem_constraints = request.data.get("problem_constraints")
         reviewType = request.data.get("reviewType")
+        language = request.data.get("language") or ""
 
         try:
-            result = aiCodeReview(code, reviewType, problem_statement, problem_name, problem_constraints)
+            result = aiCodeReview(code, reviewType, problem_statement, problem_name, problem_constraints, language)
             return Response({
                 "review": result
             }, status=status.HTTP_200_OK)
