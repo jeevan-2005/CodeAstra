@@ -16,7 +16,7 @@ const ProtectedComponent = ({ children }: { children: React.ReactNode }) => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const { isLoading } = useGetUserQuery(undefined, {
-    skip: !hasToken || !!user,
+    skip: !hasToken.hasToken || !!user,
   });
 
   useEffect(() => {
@@ -35,8 +35,8 @@ const ProtectedComponent = ({ children }: { children: React.ReactNode }) => {
 
   if (isLoading || !hasToken.fetch) {
     return (
-      <div className="h-[calc(100vh-4.2rem)] flex flex-col items-center justify-center bg-slate-950">
-        <LoadingSpinner size={50} />
+      <div className="h-screen flex flex-col items-center justify-center bg-slate-950 gap-4">
+        <LoadingSpinner size={40} />
         <p className="text-slate-400">Checking authentication...</p>
       </div>
     );
@@ -47,8 +47,8 @@ const ProtectedComponent = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="h-[calc(100vh-4.2rem)] flex flex-col items-center justify-center bg-slate-950">
-      <LoadingSpinner size={50} />
+    <div className="h-screen flex flex-col items-center justify-center bg-slate-950 gap-4">
+      <LoadingSpinner size={40} />
       <p className="text-slate-400">Redirecting to login...</p>
     </div>
   );
