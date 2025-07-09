@@ -8,7 +8,10 @@ import { useGetUserQuery } from "@/redux/auth/authApi";
 import { useRouter } from "next/navigation";
 
 const ProtectedComponent = ({ children }: { children: React.ReactNode }) => {
-  const [hasToken, setHasToken] = React.useState(false);
+  const [hasToken, setHasToken] = React.useState({
+    hasToken: false,
+    fetch: false,
+  });
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
 
@@ -18,16 +21,19 @@ const ProtectedComponent = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("refresh");
-    setHasToken(!!token);
+    setHasToken({
+      hasToken: !!token,
+      fetch: true,
+    });
   }, []);
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (!isLoading && !user && hasToken.fetch) {
       router.push("/auth/login");
     }
-  }, [isLoading, user, router]);
+  }, [isLoading, user, router, hasToken.fetch]);
 
-  if (isLoading || !hasToken) {
+  if (isLoading || !hasToken.fetch) {
     return (
       <div className="h-[calc(100vh-4.2rem)] flex flex-col items-center justify-center bg-slate-950">
         <LoadingSpinner size={50} />
