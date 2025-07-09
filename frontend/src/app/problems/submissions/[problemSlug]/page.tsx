@@ -1,11 +1,18 @@
-import UserProblemSubmissions from '@/components/UserProblemSubmissions'
-import React from 'react'
+import ProtectedComponent from "@/components/ProtectedComponent";
+import UserProblemSubmissions from "@/components/UserProblemSubmissions";
+import React from "react";
 
-const page = async ({params}: { params: Promise<{problemSlug: string}> }) => {
-    const {problemSlug} = await params
+const page = async ({
+  params,
+}: {
+  params: Promise<{ problemSlug: string }>;
+}) => {
+  const { problemSlug } = await params;
   return (
-    <div><UserProblemSubmissions problemSlug={decodeURIComponent(problemSlug)} /></div>
-  )
-}
+    <ProtectedComponent>
+      <UserProblemSubmissions problemSlug={decodeURIComponent(problemSlug)} />
+    </ProtectedComponent>
+  );
+};
 
-export default page
+export default page;

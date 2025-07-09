@@ -1,10 +1,15 @@
 import ProblemsList from '@/components/ProblemsList'
+import ProtectedComponent from '@/components/ProtectedComponent'
 import React from 'react'
 
 const page = () => {
  
   return (
-    <div><ProblemsList /></div>
+    <div>
+      <ProtectedComponent>
+        <ProblemsList />
+      </ProtectedComponent>
+    </div>
   )
 }
 
