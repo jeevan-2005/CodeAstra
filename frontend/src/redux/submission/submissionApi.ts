@@ -19,7 +19,7 @@ interface SavedCodeRequest {
 }
 
 interface RunCustomTestCaseRequest {
-  code: string;
+  code?: string;
   user_input: string;
   language: string;
 }
@@ -41,11 +41,12 @@ export interface SubmitCodeResponse {
 }
 
 export interface getAIReviewRequest {
-  code: string;
+  code?: string;
   reviewType: string;
   problem_name: string;
   problem_statement: string;
   problem_constraints: string;
+  language?: string;
 }
 
 export interface getAiReviewResponse {
@@ -60,6 +61,8 @@ export interface Submission {
   verdict: string;
   problem_id: number;
   timestamp: string;
+  time_taken: number;
+  memory_taken: number;
 }
 
 export interface UserSubmissionsResponse {
