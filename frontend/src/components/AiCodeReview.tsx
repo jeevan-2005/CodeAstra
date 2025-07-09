@@ -24,7 +24,7 @@ import AIReviewDialog from "./AIReviewDialog";
 import { ScrollArea } from "./ui/scroll-area";
 
 type Props = {
-  code: string;
+  code: string | undefined;
   problem_name: string;
   problem_statement: string;
   problem_constraints: string;

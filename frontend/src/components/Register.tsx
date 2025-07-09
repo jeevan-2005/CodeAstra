@@ -16,13 +16,10 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRegisterMutation } from "@/redux/auth/authApi";
-import { setUser } from "@/redux/auth/authSlice";
-import { useDispatch } from "react-redux";
 
 const Register = () => {
   const router = useRouter();
   const [register, { isLoading }] = useRegisterMutation();
-  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -47,17 +44,8 @@ const Register = () => {
     setLocalError(null);
 
     try {
-      const data = await register(formData).unwrap();
+      await register(formData).unwrap();
       setFormData(initialFormData);
-      if (data.tokens) {
-        localStorage.setItem("access", data.tokens.access);
-        localStorage.setItem("refresh", data.tokens.refresh);
-      }
-      if (data.id && data.username && data.email) {
-        dispatch(
-          setUser({ id: data.id, username: data.username, email: data.email })
-        );
-      }
       router.push("/");
     } catch (err: any) {
       if (err && typeof err === "object" && err.data) {

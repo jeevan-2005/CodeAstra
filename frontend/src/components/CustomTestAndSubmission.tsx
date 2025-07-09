@@ -26,7 +26,7 @@ import { Badge } from "./ui/badge";
 
 type Props = {
   problem_id: number;
-  code: string;
+  code: string | undefined;
   language: string;
   user_id: number | undefined;
 };
@@ -34,6 +34,10 @@ type Props = {
 type CustomTestError = {
   status: number;
   data: object;
+};
+type CustomTestErrorData = {
+  status: string;
+  details: string;
 };
 
 type SubmitCodeError = {
@@ -46,10 +50,6 @@ type SubmitCodeData = {
   details: string;
 };
 
-type CustomTestErrorData = {
-  status: string;
-  details: string;
-};
 
 type CustomTestOutput = {
   status: string;
@@ -90,7 +90,7 @@ const CustomTestAndSubmission = ({
       user_input: customInput,
       language,
     };
-    console.log(runCustomTestCaseRequest);
+    
     await runCustomTestCase(runCustomTestCaseRequest);
     setTab("output");
   };
@@ -192,15 +192,13 @@ const CustomTestAndSubmission = ({
 
           {isLoading || isSubmitCodeLoading ? (
             <Card className="bg-slate-950/50 border-slate-700 mt-1">
-              <CardContent className="flex items-center justify-center h-32">
-                <div className="text-center space-y-3">
+              <CardContent className="flex flex-col items-center justify-center h-32 gap-1.5">
                   <LoadingSpinner size={24} />
                   <p className="text-slate-400 text-sm">
                     {isLoading
                       ? "Running your code..."
                       : "Submitting solution..."}
                   </p>
-                </div>
               </CardContent>
             </Card>
           ) : (

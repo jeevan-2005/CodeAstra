@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,7 +28,6 @@ import {
 } from "@tanstack/react-table";
 import LoadingSpinner from "./LoadingSpinner";
 import { useGetProblemsQuery } from "@/redux/problems/problemApi";
-import { useGetUserQuery } from "@/redux/auth/authApi";
 
 
 interface Problem {
@@ -121,19 +119,16 @@ const columns: ColumnDef<Problem>[] = [
 ];
 
 const ProblemsList = () => {
-  const {data: user, isLoading: getUserLoading, isError: getUserError} = useGetUserQuery();
-  const router = useRouter();
   const [problemDifficulty, setProblemDifficulty] =
     React.useState<string>("All");
+  const router = useRouter();
 
   const queryParams: GetProblemParams = {
     difficulty: problemDifficulty === "All" ? "" : problemDifficulty,
   };
 
   const { data, isLoading, isError, isSuccess } = useGetProblemsQuery(
-    queryParams,{
-      skip: !user,
-    }
+    queryParams
   );
 
   const table = useReactTable({
@@ -142,35 +137,16 @@ const ProblemsList = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  useEffect(() => {
-    if (!user && !getUserLoading) {
-      router.push("/auth/login");
-    }
-  }, [user, getUserLoading, router]);
-
-  if (getUserLoading) {
-    return (
-      <div className="h-[calc(100vh-4.2rem)] bg-slate-950 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <LoadingSpinner size={25} />
-          <p className="text-slate-400">Checking authentication...</p>
-        </div>
-      </div>
-    );
-  }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <LoadingSpinner size={20} />
+      <div className="h-[calc(100vh-4.2rem)] flex-col  bg-slate-950 flex items-center justify-center">
+          <LoadingSpinner size={25} />
           <p className="text-slate-400">Loading problems...</p>
-        </div>
       </div>
     );
   }
-
-  if (isError || getUserError) {
+  if (isError) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <Card className="bg-red-500/10 border-red-500/20 max-w-md">
@@ -356,5 +332,6 @@ const ProblemsList = () => {
     </div>
   );
 };
+
 
 export default ProblemsList;

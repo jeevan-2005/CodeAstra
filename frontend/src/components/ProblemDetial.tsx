@@ -14,6 +14,7 @@ import { RootState } from "@/redux/store";
 import { Card, CardContent } from "./ui/card";
 import { AlertTriangle } from "lucide-react";
 import AiCodeReview from "./AiCodeReview";
+import { Button } from "./ui/button";
 
 export interface ProblemFetchError {
   status: number;
@@ -28,9 +29,7 @@ const ProblemDetial = ({ id }: { id: number }) => {
 
   const problemData = data as SingleProblemDetial;
 
-  const [code, setCode] = React.useState<string>(
-    "// Select a language above and start typing!"
-  );
+  const [code, setCode] = React.useState<string | undefined>("");
 
   const [language, setLanguage] = React.useState<string>("cpp");
 
@@ -59,12 +58,12 @@ const ProblemDetial = ({ id }: { id: number }) => {
               {(error as ProblemFetchError)?.data?.detail ||
                 "Failed to load problem data"}
             </p>
-            <button
+            <Button
               onClick={() => window.location.reload()}
               className="mt-6 bg-red-500/20 hover:bg-red-500/30 text-red-400 px-6 py-2 rounded-lg transition-colors"
             >
               Try Again
-            </button>
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -95,6 +94,9 @@ const ProblemDetial = ({ id }: { id: number }) => {
           <div className="flex-1 p-0 flex flex-col gap-4 rounded-sm">
             <CodeEditer
               problem_id={id}
+              problem_name={problemData.problem_name}
+              problem_statement={problemData.problem_statement}
+              problem_constraints={problemData.constraints}
               code={code}
               setCode={setCode}
               language={language}

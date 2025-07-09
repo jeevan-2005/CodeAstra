@@ -48,15 +48,11 @@ const Navbar = () => {
     if (refresh) {
       try {
         await logoutApi({ refresh }).unwrap();
+        router.push("/");
       } catch (err) {
         console.log(err);
       }
     }
-    // Remove tokens and user from Redux
-    localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
-    dispatch(logout());
-    router.push("/");
   };
 
   const navigationItems = [
@@ -186,6 +182,16 @@ const Navbar = () => {
                     className="group inline-flex h-9 w-max items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-all duration-200 hover:bg-slate-800/50 hover:text-white focus:bg-slate-800/50 focus:text-white focus:outline-none text-[16px]"
                   >
                     My Submissions
+                  </Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+                            <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link
+                    href="/compiler"
+                    className="group inline-flex h-9 w-max items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-all duration-200 hover:bg-slate-800/50 hover:text-white focus:bg-slate-800/50 focus:text-white focus:outline-none text-[16px]"
+                  >
+                    Compiler
                   </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>

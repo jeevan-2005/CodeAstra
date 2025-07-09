@@ -50,17 +50,7 @@ const Login = () => {
     setLocalError(null);
 
     try {
-      const data = await login(formData).unwrap();
-      if (data.tokens) {
-        localStorage.setItem("access", data.tokens.access);
-        localStorage.setItem("refresh", data.tokens.refresh);
-      }
-      if (data.id && data.username && data.email) {
-        dispatch(
-          setUser({ id: data.id, username: data.username, email: data.email })
-        );
-      }
-      
+      await login(formData).unwrap();
       setFormData(initialFormData);
       router.push("/");
     } catch (err: any) {

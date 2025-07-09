@@ -7,7 +7,6 @@ import {
   AlertTriangle,
   Code,
   Calendar,
-  Eye,
 } from "lucide-react";
 import {
   Table,
@@ -19,9 +18,9 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
 import { Submission } from "@/redux/submission/submissionApi";
 import Link from "next/link";
+import CodeDisplay from "./CodeDisplay";
 
 type Props = {
   submissions: Submission[];
@@ -235,7 +234,7 @@ const SubmissionTable = ({ submissions, problemSlug }: Props) => {
                           <div className="space-y-1">
                             <div className="text-slate-300 text-xs">
                               <span className="text-slate-400">Time:</span>{" "}
-                              {"-----"}
+                              {submission.time_taken}{"ms"}
                             </div>
                             <div className="text-slate-300 text-xs">
                               <span className="text-slate-400">Memory:</span>{" "}
@@ -245,13 +244,7 @@ const SubmissionTable = ({ submissions, problemSlug }: Props) => {
                         </TableCell>
 
                         <TableCell className="py-4">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 cursor-pointer"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
+                          <CodeDisplay code={submission.code} problem_name={submission.problem_name} language={submission.language} />
                         </TableCell>
                       </TableRow>
                     );

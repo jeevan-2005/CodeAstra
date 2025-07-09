@@ -3,10 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  XCircle,
-  RefreshCw,
-} from "lucide-react";
+import { XCircle, RefreshCw } from "lucide-react";
 import {
   Submission,
   useGetUserSubmissionsQuery,
@@ -32,11 +29,9 @@ const SubmissionsPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <LoadingSpinner size={50} />
-          <p className="text-slate-400">Loading your submissions...</p>
-        </div>
+      <div className="h-[calc(100vh-4.6rem)] bg-slate-950 flex flex-col items-center justify-center">
+        <LoadingSpinner size={50} />
+        <p className="text-slate-400">Loading your submissions...</p>
       </div>
     );
   }
