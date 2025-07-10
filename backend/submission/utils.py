@@ -4,6 +4,7 @@ import subprocess
 from pathlib import Path
 from google import genai
 from dotenv import load_dotenv
+import time
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -35,16 +36,15 @@ def execute_code(code, language, user_input , input_type):
 
         if language == "c":
             result = cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, 2, "gcc", input_type)
-            executable_file_name = f"{unique_name}.exe"
-            executable_file_path = os.path.join(folder_path, executable_file_name)
+            executable_file_path = os.path.join(folder_path, unique_name)
 
         elif language == "cpp":
             result = cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, 2, "g++", input_type)
-            executable_file_name = f"{unique_name}.exe"
-            executable_file_path = os.path.join(folder_path, executable_file_name)
+            executable_file_path = os.path.join(folder_path, unique_name)
 
         elif language == "py":
             try:
+                start_time = time.monotonic()
                 if (input_type == "bytes"):
                     execution_result = subprocess.run(
                         ["python", code_file_path],
@@ -62,7 +62,8 @@ def execute_code(code, language, user_input , input_type):
                             stderr=subprocess.PIPE,
                             timeout=7
                         )
-                        
+
+                end_time = time.monotonic()
                 execution_stdout = execution_result.stdout.decode("utf-8", errors='ignore')
                 execution_stderr = execution_result.stderr.decode("utf-8", errors='ignore')
                 
@@ -74,7 +75,8 @@ def execute_code(code, language, user_input , input_type):
                 else:
                     result = {
                     "status": "success",
-                    "output": execution_stdout
+                    "output": execution_stdout,
+                    "execution_time": int((end_time - start_time)*1000)
                     }
             except FileNotFoundError:
                 result = {
@@ -122,7 +124,6 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
             [compiler, code_file_path, "-o", executable_file_path],
             capture_output=True,
             text=True,
-            timeout=timeout_seconds
         )
     except FileNotFoundError:
         result = {
@@ -147,9 +148,10 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
             }
     else:
         try:
+            start_time = time.monotonic()
             if (input_type == "bytes"):
                 execution_result = subprocess.run(
-                    [f"./{unique_name}.exe"],
+                    [f"./{unique_name}"],
                     input=user_input,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
@@ -158,13 +160,14 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
             else:
                 with open(f"{user_input}", "r") as input_file:
                     execution_result = subprocess.run(
-                        [f"./{unique_name}.exe"],
+                        [f"./{unique_name}"],
                         stdin=input_file,
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                         timeout=timeout_seconds
                     )
-                    
+            end_time = time.monotonic()
+            
             execution_stdout = execution_result.stdout.decode("utf-8", errors='ignore')
             execution_stderr = execution_result.stderr.decode("utf-8", errors='ignore')
             
@@ -176,7 +179,8 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
             else:
                 result = {
                 "status": "success",
-                "output": execution_stdout
+                "output": execution_stdout,
+                "execution_time": int((end_time - start_time)*1000)
                 }
         except FileNotFoundError:
             result = {
@@ -204,16 +208,20 @@ def getPrompt(reviewType):
         return "As an AI assistant, please analyze the following code to identify potential bugs. If bugs are found, provide the corrected code along with an explanation of the bug and how the fix resolves it:\n\n"
     elif reviewType == "provideHints":
         return "As an AI assistant focused on guiding learning, please provide *just one* helpful hint related to the following problem it addresses and the constraints provided in the problem. This hint should guide the user towards a solution or improvement without giving it away entirely. Provide only the hint:\n\n"
+    elif reviewType=="getBoilerPateCode":
+        return "As an AI assistant, please generate a boilerplate code for the following problem and language specified. Focus on readability, efficiency, and any notable issues.Please use variable names that are easy to understand and suitable for the problem.Please do not add any type of Key improvements and explanations section and please keep minimal comments, add only if neccessary. Dont give complete solution code just give the function and its respective calling with input taking part. Please Provide the starte so that the user can start coding on the problem:\n\n"
     
     return
 
 
 
-def aiCodeReview(code, reviewType, problem_statement, problem_name, problem_constraints):
+def aiCodeReview(code, reviewType, problem_statement, problem_name, problem_constraints, language):
     basePrompt = getPrompt(reviewType=reviewType)
-
+    codeLanguage = f"provide Boilerplate code in {language} language:"
     if reviewType == "provideHints":
         prompt = basePrompt + problem_name + problem_statement + problem_constraints
+    elif reviewType == "getBoilerPateCode":
+        prompt = basePrompt + problem_name + problem_statement + problem_constraints + codeLanguage
     else:
         prompt = problem_name + problem_statement + problem_constraints + basePrompt + code
     
