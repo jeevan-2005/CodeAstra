@@ -48,7 +48,7 @@ const Register = () => {
       setFormData(initialFormData);
       router.push("/");
     } catch (err: unknown) {
-      let errorMessage = "Login failed. Please try again.";
+      let errorMessage = "Registration failed. Please try again.(Network error)";
 
       if (err && typeof err === "object" && "data" in err) {
         const errorData = (err as { data: unknown }).data;

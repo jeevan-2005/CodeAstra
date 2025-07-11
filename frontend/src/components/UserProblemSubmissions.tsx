@@ -39,11 +39,9 @@ const UserProblemSubmissions = ({problemSlug}: Props) => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <LoadingSpinner size={50} />
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
+          <LoadingSpinner size={37} />
           <p className="text-slate-400">Loading your submissions...</p>
-        </div>
       </div>
     );
   }
