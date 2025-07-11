@@ -53,16 +53,19 @@ const Login = () => {
       await login(formData).unwrap();
       setFormData(initialFormData);
       router.push("/");
-    } catch (err: any) {
-      if (err && typeof err === "object" && err.data) {
-        setLocalError(
-          Object.values(err.data)
+    } catch (err: unknown) {
+      let errorMessage = "Login failed. Please try again.";
+
+      if (err && typeof err === "object" && "data" in err) {
+        const errorData = (err as { data: unknown }).data;
+        if (typeof errorData === "object" && errorData !== null) {
+          errorMessage = Object.values(errorData)
             .map((val) => (Array.isArray(val) ? val.join(", ") : String(val)))
-            .join(" ")
-        );
-      } else {
-        setLocalError("Login failed. Please try again.");
+            .join(" ");
+        }
       }
+
+      setLocalError(errorMessage);
     }
   };
 
@@ -73,8 +76,12 @@ const Login = () => {
           <div className="mx-auto w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center mb-4">
             <Lock className="h-6 w-6 text-white" />
           </div>
-          <CardTitle className="text-2xl font-bold text-white">Welcome Back</CardTitle>
-          <CardDescription className="text-slate-400">Enter your credentials to access your account</CardDescription>
+          <CardTitle className="text-2xl font-bold text-white">
+            Welcome Back
+          </CardTitle>
+          <CardDescription className="text-slate-400">
+            Enter your credentials to access your account
+          </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -121,8 +128,14 @@ const Login = () => {
                   className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-slate-700/50 text-slate-400 hover:text-slate-300 transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                  <span className="sr-only">
+                    {showPassword ? "Hide password" : "Show password"}
+                  </span>
                 </Button>
               </div>
             </div>

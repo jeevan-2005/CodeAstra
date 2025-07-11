@@ -2,10 +2,9 @@
 
 import React, { useEffect } from "react";
 import { Button } from "./ui/button";
-import { IoPlay } from "react-icons/io5";
-import { FaCircleCheck } from "react-icons/fa6";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import {
+  SubmitCodeRequest,
   useRunCustomTestCaseMutation,
   useSubmitCodeMutation,
 } from "@/redux/submission/submissionApi";
@@ -96,7 +95,7 @@ const CustomTestAndSubmission = ({
   };
 
   const handleCodeSubmit = async () => {
-    const submitRequestData = {
+    const submitRequestData: SubmitCodeRequest = {
       problem_id: problem_id,
       code: code,
       language: language,

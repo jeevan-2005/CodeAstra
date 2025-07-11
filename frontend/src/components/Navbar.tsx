@@ -28,15 +28,13 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useLogoutMutation } from "@/redux/auth/authApi";
-import { logout } from "@/redux/auth/authSlice";
 import { NewUser } from "@/redux/auth/authSlice";
 
 const Navbar = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const user: NewUser | null  = useSelector((state: RootState) => state.auth.user);
   const [logoutApi] = useLogoutMutation();
   const handleRedirect = ( href: string ) => {

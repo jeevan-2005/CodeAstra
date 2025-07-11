@@ -201,7 +201,7 @@ export default function Home() {
               Upcoming{" "}
               <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">Contests</span>
             </h2>
-            <p className="text-xl text-slate-400">Don't miss these exciting competitive programming challenges</p>
+            <p className="text-xl text-slate-400">Don&apos;t miss these exciting competitive programming challenges</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -218,7 +218,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-semibold text-white">Weekly Challenge #47</h3>
                 <p className="text-slate-400">
-                  Test your skills with dynamic programming and graph algorithms in this week's challenge.
+                  Test your skills with dynamic programming and graph algorithms in this week&apos;s challenge.
                 </p>
                 <div className="flex items-center justify-between pt-2">
                   <div className="text-sm text-slate-400">Duration: 2 hours</div>
@@ -270,7 +270,7 @@ export default function Home() {
                     2,156 registered
                   </div>
                 </div>
-                <h3 className="text-xl font-semibold text-white">Beginner's Cup</h3>
+                <h3 className="text-xl font-semibold text-white">Beginner&apos;s Cup</h3>
                 <p className="text-slate-400">
                   Perfect for newcomers! Easy to medium problems designed to build your confidence.
                 </p>

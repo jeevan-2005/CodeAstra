@@ -3,7 +3,6 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { ArrowRight, CheckCircle, FileText, Play } from "lucide-react";
 import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
 import Link from "next/link";
 
 type Props = {

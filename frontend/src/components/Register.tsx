@@ -47,16 +47,19 @@ const Register = () => {
       await register(formData).unwrap();
       setFormData(initialFormData);
       router.push("/");
-    } catch (err: any) {
-      if (err && typeof err === "object" && err.data) {
-        setLocalError(
-          Object.values(err.data)
+    } catch (err: unknown) {
+      let errorMessage = "Login failed. Please try again.";
+
+      if (err && typeof err === "object" && "data" in err) {
+        const errorData = (err as { data: unknown }).data;
+        if (typeof errorData === "object" && errorData !== null) {
+          errorMessage = Object.values(errorData)
             .map((val) => (Array.isArray(val) ? val.join(", ") : String(val)))
-            .join(" ")
-        );
-      } else {
-        setLocalError("Registration failed. Please try again.");
+            .join(" ");
+        }
       }
+
+      setLocalError(errorMessage);
     }
   };
 
