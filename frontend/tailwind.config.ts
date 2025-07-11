@@ -75,15 +75,10 @@ const config = {
       },
     },
   },
-  // Plugins array is still used in v4 config
   plugins: [
       tailwindcssAnimate,
-      typography, // Add the typography plugin here
-      // ... other plugins
   ],
-  // v4 might have a slightly different top-level structure or additional options
-  // Refer to the official v4 docs for Next.js for the definitive structure.
 
-} satisfies Config; // Using satisfies for type checking
+} satisfies Config;
 
 export default config;
