@@ -1,14 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Code2,
   Trophy,
   Users,
   Target,
-  Clock,
   Star,
   TrendingUp,
   BookOpen,
@@ -17,7 +16,7 @@ import {
   ChevronRight,
   Play,
   CheckCircle,
-} from "lucide-react"
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -41,8 +40,9 @@ export default function Home() {
                 <span className="text-white">Through Competition</span>
               </h1>
               <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-                Join thousands of programmers in solving challenging problems, competing in contests, and improving your
-                algorithmic thinking skills.
+                Join thousands of programmers in solving challenging problems,
+                competing in contests, and improving your algorithmic thinking
+                skills.
               </p>
             </div>
 
@@ -71,25 +71,33 @@ export default function Home() {
                 <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
                   50K+
                 </div>
-                <div className="text-slate-400 text-sm md:text-base">Active Users</div>
+                <div className="text-slate-400 text-sm md:text-base">
+                  Active Users
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
                   2.5K+
                 </div>
-                <div className="text-slate-400 text-sm md:text-base">Problems</div>
+                <div className="text-slate-400 text-sm md:text-base">
+                  Problems
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
                   500+
                 </div>
-                <div className="text-slate-400 text-sm md:text-base">Contests</div>
+                <div className="text-slate-400 text-sm md:text-base">
+                  Contests
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
                   1M+
                 </div>
-                <div className="text-slate-400 text-sm md:text-base">Submissions</div>
+                <div className="text-slate-400 text-sm md:text-base">
+                  Submissions
+                </div>
               </div>
             </div>
           </div>
@@ -108,7 +116,8 @@ export default function Home() {
               ?
             </h2>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Everything you need to excel in competitive programming and technical interviews
+              Everything you need to excel in competitive programming and
+              technical interviews
             </p>
           </div>
 
@@ -118,10 +127,12 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Code2 className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-white">Diverse Problem Set</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  Diverse Problem Set
+                </h3>
                 <p className="text-slate-400">
-                  Over 2,500 carefully curated problems ranging from beginner to expert level across all major
-                  algorithms and data structures.
+                  Over 2,500 carefully curated problems ranging from beginner to
+                  expert level across all major algorithms and data structures.
                 </p>
               </CardContent>
             </Card>
@@ -131,10 +142,12 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Trophy className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-white">Regular Contests</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  Regular Contests
+                </h3>
                 <p className="text-slate-400">
-                  Participate in weekly contests, monthly challenges, and special events to test your skills against
-                  global competitors.
+                  Participate in weekly contests, monthly challenges, and
+                  special events to test your skills against global competitors.
                 </p>
               </CardContent>
             </Card>
@@ -144,9 +157,12 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Users className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-white">Global Community</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  Global Community
+                </h3>
                 <p className="text-slate-400">
-                  Connect with 50,000+ programmers worldwide, share solutions, and learn from the best in the community.
+                  Connect with 50,000+ programmers worldwide, share solutions,
+                  and learn from the best in the community.
                 </p>
               </CardContent>
             </Card>
@@ -156,10 +172,13 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500 to-red-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Zap className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-white">Real-time Judging</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  Real-time Judging
+                </h3>
                 <p className="text-slate-400">
-                  Get instant feedback on your submissions with our lightning-fast judging system supporting 15+
-                  programming languages.
+                  Get instant feedback on your submissions with our
+                  lightning-fast judging system supporting 15+ programming
+                  languages.
                 </p>
               </CardContent>
             </Card>
@@ -169,10 +188,12 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <TrendingUp className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-white">Progress Tracking</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  Progress Tracking
+                </h3>
                 <p className="text-slate-400">
-                  Monitor your improvement with detailed analytics, rating changes, and personalized learning
-                  recommendations.
+                  Monitor your improvement with detailed analytics, rating
+                  changes, and personalized learning recommendations.
                 </p>
               </CardContent>
             </Card>
@@ -182,107 +203,13 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <BookOpen className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-white">Learning Resources</h3>
+                <h3 className="text-xl font-semibold text-white">
+                  Learning Resources
+                </h3>
                 <p className="text-slate-400">
-                  Access comprehensive tutorials, editorial solutions, and video explanations to master complex
-                  algorithms.
+                  Access comprehensive tutorials, editorial solutions, and video
+                  explanations to master complex algorithms.
                 </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Contest Highlights */}
-      <section className="py-20 lg:py-32 bg-slate-900/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-white">
-              Upcoming{" "}
-              <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">Contests</span>
-            </h2>
-            <p className="text-xl text-slate-400">Don&apos;t miss these exciting competitive programming challenges</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="bg-slate-900/50 border-slate-800 hover:bg-slate-900/70 transition-all duration-300">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <Badge className="bg-green-500/10 text-green-400 border-green-500/20">
-                    <Clock className="w-3 h-3 mr-1" />2 days left
-                  </Badge>
-                  <div className="flex items-center text-slate-400 text-sm">
-                    <Users className="w-4 h-4 mr-1" />
-                    1,234 registered
-                  </div>
-                </div>
-                <h3 className="text-xl font-semibold text-white">Weekly Challenge #47</h3>
-                <p className="text-slate-400">
-                  Test your skills with dynamic programming and graph algorithms in this week&apos;s challenge.
-                </p>
-                <div className="flex items-center justify-between pt-2">
-                  <div className="text-sm text-slate-400">Duration: 2 hours</div>
-                  <Button
-                    size="sm"
-                    className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600"
-                  >
-                    Register
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-slate-900/50 border-slate-800 hover:bg-slate-900/70 transition-all duration-300">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <Badge className="bg-orange-500/10 text-orange-400 border-orange-500/20">
-                    <Clock className="w-3 h-3 mr-1" />5 days left
-                  </Badge>
-                  <div className="flex items-center text-slate-400 text-sm">
-                    <Users className="w-4 h-4 mr-1" />
-                    856 registered
-                  </div>
-                </div>
-                <h3 className="text-xl font-semibold text-white">Monthly Mega Contest</h3>
-                <p className="text-slate-400">
-                  Our biggest contest of the month featuring 8 challenging problems and amazing prizes.
-                </p>
-                <div className="flex items-center justify-between pt-2">
-                  <div className="text-sm text-slate-400">Duration: 3 hours</div>
-                  <Button
-                    size="sm"
-                    className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600"
-                  >
-                    Register
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-slate-900/50 border-slate-800 hover:bg-slate-900/70 transition-all duration-300">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <Badge className="bg-purple-500/10 text-purple-400 border-purple-500/20">
-                    <Clock className="w-3 h-3 mr-1" />1 week left
-                  </Badge>
-                  <div className="flex items-center text-slate-400 text-sm">
-                    <Users className="w-4 h-4 mr-1" />
-                    2,156 registered
-                  </div>
-                </div>
-                <h3 className="text-xl font-semibold text-white">Beginner&apos;s Cup</h3>
-                <p className="text-slate-400">
-                  Perfect for newcomers! Easy to medium problems designed to build your confidence.
-                </p>
-                <div className="flex items-center justify-between pt-2">
-                  <div className="text-sm text-slate-400">Duration: 2.5 hours</div>
-                  <Button
-                    size="sm"
-                    className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600"
-                  >
-                    Register
-                  </Button>
-                </div>
               </CardContent>
             </Card>
           </div>
@@ -302,32 +229,42 @@ export default function Home() {
                   </span>
                 </h2>
                 <p className="text-xl text-slate-400">
-                  Monitor your coding journey with detailed analytics, rating progression, and achievement badges.
+                  Monitor your coding journey with detailed analytics, rating
+                  progression, and achievement badges.
                 </p>
               </div>
 
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="h-5 w-5 text-green-400" />
-                  <span className="text-slate-300">Real-time rating updates after each contest</span>
+                  <span className="text-slate-300">
+                    Real-time rating updates after each contest
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="h-5 w-5 text-green-400" />
-                  <span className="text-slate-300">Detailed problem-solving statistics</span>
+                  <span className="text-slate-300">
+                    Detailed problem-solving statistics
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="h-5 w-5 text-green-400" />
-                  <span className="text-slate-300">Achievement badges and milestones</span>
+                  <span className="text-slate-300">
+                    Achievement badges and milestones
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="h-5 w-5 text-green-400" />
-                  <span className="text-slate-300">Personalized learning recommendations</span>
+                  <span className="text-slate-300">
+                    Personalized learning recommendations
+                  </span>
                 </div>
               </div>
 
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-xl"
+                onClick={() => router.push("/profile")}
               >
                 View Your Profile
                 <ChevronRight className="ml-2 h-5 w-5" />
@@ -395,8 +332,9 @@ export default function Home() {
               ?
             </h2>
             <p className="text-xl text-slate-400">
-              Join thousands of programmers who are already improving their skills on CodeAstra. Start solving problems,
-              participate in contests, and climb the leaderboard today!
+              Join thousands of programmers who are already improving their
+              skills on CodeAstra. Start solving problems, participate in
+              contests, and climb the leaderboard today!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -419,5 +357,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  )
+  );
 }
