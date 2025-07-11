@@ -1,5 +1,5 @@
 // src/redux/auth/customBaseQuery.ts
-import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 
 interface RefreshResult {
   access: string;
@@ -19,10 +19,14 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-export const customBaseQuery = async (
-  args: any,
-  api: any,
-  extraOptions: any
+export const customBaseQuery: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (
+  args,
+  api,
+  extraOptions
 ) => {
   let result = await baseQuery(args, api, extraOptions);
 

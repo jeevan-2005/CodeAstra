@@ -31,7 +31,7 @@ export interface RunCustomTestCaseResponse {
 export interface SubmitCodeRequest {
   user_id: number | undefined;
   problem_id: number;
-  code: string;
+  code: string | undefined;
   language: string;
 }
 
