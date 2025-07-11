@@ -59,6 +59,7 @@ export default function Home() {
                 size="lg"
                 variant="outline"
                 className="border-slate-700 text-slate-300 hover:bg-slate-800/50 hover:text-white hover:border-slate-600 px-8 py-6 text-lg bg-transparent cursor-pointer"
+                onClick={() => router.push("/contests")}
               >
                 View Contests
                 <ChevronRight className="ml-2 h-5 w-5" />
@@ -263,7 +264,7 @@ export default function Home() {
 
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-xl"
+                className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-xl cursor-pointer"
                 onClick={() => router.push("/profile")}
               >
                 View Your Profile
