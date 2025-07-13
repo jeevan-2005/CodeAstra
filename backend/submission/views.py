@@ -8,7 +8,6 @@ from problems.models import *
 from accounts.models import *
 from .utils import execute_code, aiCodeReview
 from .serializers import SubmissionSerializer
-import os
 
 class SaveCodeView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -195,7 +194,7 @@ class SubmitCodeView(APIView):
         except Exception as e:
             return Response({
                 "verdict": "Internal Server Error",
-                "details": str(e)
+                "details": f"{str(e)} - exception"
             },status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -220,8 +219,8 @@ class AiCodeReview(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class getUserSubmissions(APIView):
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id:int):
 

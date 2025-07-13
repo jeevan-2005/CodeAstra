@@ -116,7 +116,6 @@ def execute_code(code, language, user_input , input_type):
 
     return result
 
-
 def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, timeout_seconds, compiler, input_type):
     executable_file_path = os.path.join(folder_path, unique_name)
     try:
@@ -212,8 +211,6 @@ def getPrompt(reviewType):
         return "As an AI assistant, please generate a boilerplate code for the following problem and language specified. Focus on readability, efficiency, and any notable issues.Please use variable names that are easy to understand and suitable for the problem.Please do not add any type of Key improvements and explanations section and please keep minimal comments, add only if neccessary. Dont give complete solution code just give the function and its respective calling with input taking part. Please Provide the starte so that the user can start coding on the problem:\n\n"
     
     return
-
-
 
 def aiCodeReview(code, reviewType, problem_statement, problem_name, problem_constraints, language):
     basePrompt = getPrompt(reviewType=reviewType)
