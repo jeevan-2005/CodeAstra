@@ -5,6 +5,7 @@ from pathlib import Path
 from google import genai
 from dotenv import load_dotenv
 import time
+import re
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -12,12 +13,36 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
+def is_cin_used_as_input(filepath):
+    try:
+        with open(filepath, 'r') as file:
+            content = file.read()
+
+            # comments (/* ... */)
+            clean_content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+
+            # comments (// ...)
+            clean_content = re.sub(r'//.*', '', clean_content)
+
+            # string literals ("...")
+            clean_content = re.sub(r'".*?"', '', clean_content)
+
+            # searching in clean code.
+            pattern = r"(?:std::\s*)?cin\s*>>"
+            if re.search(pattern, clean_content):
+                return True
+            else:
+                return False
+
+    except FileNotFoundError:
+        print(f"Error: The file '{filepath}' was not found.")
+        return False
+
 def execute_code(code, language, user_input , input_type):
 
     folder_name = "InputCodes"
     curr_dir = os.getcwd()
     folder_path = os.path.join(curr_dir, folder_name)
-
     os.makedirs(folder_path, exist_ok=True)
 
     unique_name = uuid.uuid4().hex
@@ -114,6 +139,12 @@ def execute_code(code, language, user_input , input_type):
             except OSError as e:
                 print(f"Warning: Could not remove executable file {executable_file_path}: {e}")
 
+        if os.path.exists(folder_path):
+            try:
+                os.rmdir(folder_path)
+            except OSError as e:
+                print(f"Warning: Could not remove folder {folder_path}: {e}")
+
     return result
 
 def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, user_input, timeout_seconds, compiler, input_type):
@@ -136,9 +167,10 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
             "details": f"Compilation timed out after {timeout_seconds} seconds."
         }
         return result
+    
 
-    Basedir = os.getcwd()
-    os.chdir(os.path.join(Basedir, "InputCodes"))
+    # Basedir = os.getcwd()
+    # os.chdir(os.path.join(Basedir, "InputCodes"))
     
     if compilation_res.returncode != 0:
             result = {
@@ -146,20 +178,29 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
                 "details": compilation_res.stderr
             }
     else:
+        if (is_cin_used_as_input(code_file_path) and input_type == "bytes" and user_input == b''):
+            # os.chdir(Basedir)
+            return {
+                "status": "runtime_error",
+                "details": "Program is reading input from standard input and you forgot to provide input via stdin."
+            }
         try:
             start_time = time.monotonic()
             if (input_type == "bytes"):
                 execution_result = subprocess.run(
-                    [f"./{unique_name}"],
+                    [f"{executable_file_path}"],
                     input=user_input,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     timeout=timeout_seconds
                 )
             else:
+                print(1, user_input)    
                 with open(f"{user_input}", "r") as input_file:
+                    print(1)
+                    print(input_file)
                     execution_result = subprocess.run(
-                        [f"./{unique_name}"],
+                        [f"{executable_file_path}"],
                         stdin=input_file,
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
@@ -170,16 +211,29 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
             execution_stdout = execution_result.stdout.decode("utf-8", errors='ignore')
             execution_stderr = execution_result.stderr.decode("utf-8", errors='ignore')
             
-            if execution_stderr:
+            if execution_result.returncode != 0:
+                details = execution_stderr
+                if not details:
+                    details = f"""Process exited with non-zero return code: {execution_result.returncode}
+                    Possible reasons:
+                    1. If your program is reading input from standard input and you forgot to provide input via stdin.
+                    2. Your program contains infinite recursive function calls.
+                    3. May be your program is trying to process large data and it takes much time to process"""
+                    
                 result = {
+                    "status": "runtime_error",
+                    "details": details
+                }
+            elif execution_stderr:
+                 result = {
                     "status": "runtime_error",
                     "details": execution_stderr
                 }
             else:
                 result = {
-                "status": "success",
-                "output": execution_stdout,
-                "execution_time": int((end_time - start_time)*1000)
+                    "status": "success",
+                    "output": execution_stdout,
+                    "execution_time": int((end_time - start_time)*1000)
                 }
         except FileNotFoundError:
             result = {
@@ -191,7 +245,7 @@ def cAndCppCompilationAndExecution(folder_path, unique_name, code_file_path, use
                 "status": "timeout_error",
                 "details": f"Execution timed out after {timeout_seconds} seconds."
             }
-    os.chdir(Basedir)
+    # os.chdir(Basedir)
     
     return result
 
